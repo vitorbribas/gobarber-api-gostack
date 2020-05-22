@@ -14,7 +14,7 @@ export default class AlterProviderFieldToProviderId1590109534189
       new TableColumn({
         name: 'provider_id',
         type: 'uuid',
-        isNullable: true,
+        isNullable: true, // permit appointments without provider (if provider deleted)
       }),
     );
     await queryRunner.createForeignKey(
@@ -24,8 +24,8 @@ export default class AlterProviderFieldToProviderId1590109534189
         columnNames: ['provider_id'],
         referencedColumnNames: ['id'],
         referencedTableName: 'users',
-        onDelete: 'SET NULL', // 'RESTRICT ou CASCADE ou SET NULL'
-        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL', // 'RESTRICT ou CASCADE ou SET NULL' (prevent user exclusion, permit and delete appointments or set null)
+        onUpdate: 'CASCADE', // update appointment provider_id if user id change
       }),
     );
   }
